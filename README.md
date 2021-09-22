@@ -225,6 +225,10 @@ https://github.com/michael-the1/python-cuckoo
 
 https://medium.com/4iqdelvedeep/1-4-billion-clear-text-credentials-discovered-in-a-single-database-3131d0a1ae14
 
+https://www.amazon.in/Probabilistic-Data-Structures-Algorithms-Applications/dp/3748190484
+
+https://en.wikipedia.org/wiki/Quotient_filter
+
 ## Future Work
 
 - Adding better UI
