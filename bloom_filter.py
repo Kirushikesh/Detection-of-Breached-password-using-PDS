@@ -55,5 +55,8 @@ class BloomFilter():
 
         return True
 
+    def set_bit_array(self,array):
+        self.bit_array=array
+        
     def required_memory(self):
         return self.m

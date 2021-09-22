@@ -2,7 +2,6 @@ from bloom_filter import BloomFilter
 from counting_bloom_filter import CBloomFilter
 from quotient_filter import QuotientFilter
 from cuckoo_filter import CuckooFilter
-from random import shuffle
  
 n = 1000000
 p = 0.001
