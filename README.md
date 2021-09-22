@@ -33,6 +33,17 @@
 ![image](https://user-images.githubusercontent.com/49152921/134325124-a648d877-8485-4834-9f18-51fbc4a3405c.png)
 ![image](https://user-images.githubusercontent.com/49152921/134325149-23177574-4601-40c1-9ce9-c3ca892fb1cb.png)
 
+# References
+https://github.com/prriyanayak/Advanced-Algorithm-Project
+https://dzone.com/articles/introduction-probabilistic-0#:~:text=Probabilistic%20data%20structures%20have%20many,commonly%20used%20probabilistic%20data%20structures.
+https://www.kdnuggets.com/2019/08/count-big-data-probabilistic-data-structures-algorithms.html
+https://github.com/gakhov/pdsa
+https://www.threatstack.com/blog/optimizing-detection-of-breached-passwords
+https://haveibeenpwned.com/Passwords#:~:text=Pwned%20Passwords%20are%20613%2C584%2C246%20real,to%20take%20over%20other%20accounts.
+https://www.troyhunt.com/introducing-306-million-freely-downloadable-pwned-passwords/
+https://github.com/vedantk/quotient-filter
+https://github.com/michael-the1/python-cuckoo
+
 ![image](https://user-images.githubusercontent.com/49152921/134343051-673c7b12-72a4-4d52-a934-7998c1b49490.png)
 ![image](https://user-images.githubusercontent.com/49152921/134343803-9daff8c7-d67e-4efc-a583-a7d32588e468.png)
 
