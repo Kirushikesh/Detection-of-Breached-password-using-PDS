@@ -36,10 +36,10 @@ Possible workaround solutions like chunking such sets and running comparisons in
 The problem of fast lookup can be solved using hashing, which is also the simplest way to do that. With a hash function, every element of the dataset can be hashed into a hash table that maintains a (sorted) list of hash values. However, such an approach yields a small probability of errors (caused by possible hash collisions) and requires about O(log n) bits per each hashed element. This this application we are going to look 4 different types of Probabilistic Data Structures which can be useful for the membership problem with a small amount on error.
 
 ## Different Algorithms
-- [Bloom Filter](#bloom-filter)
-- [Counting Bloom Filter](#counting-bloom-filter)
-- [Quotient Filter](#quotient-filter)
-- [Cuckoo Filter](cuckoo-filter)
+- [Bloom Filter](##bloom-filter)
+- [Counting Bloom Filter](##counting-bloom-filter)
+- [Quotient Filter](##quotient-filter)
+- [Cuckoo Filter](##cuckoo-filter)
 
 ### Bloom Filter
 
