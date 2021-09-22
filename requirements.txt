@@ -1,4 +1,4 @@
-bitarray @ file:///C:/ci/bitarray_1629133068652/work
+bitarray==2.3.4
 certifi==2021.5.30
 click==8.0.1
 colorama==0.4.4
