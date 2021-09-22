@@ -191,7 +191,20 @@ quotient_filter.py contains class QuotientFilter which takes the parameter numbe
 
 cuckoo_filter.py contains class CuckooFilter which takes the parameter number of entries(n), each bucket size(bucket_size), false positive probability(fp_rate), maximum no of iterations(max_kicks), fingerprint size(p) and, the number of buckets(m).
 
-# References
+![image](https://user-images.githubusercontent.com/49152921/134311376-3293c8c9-11c3-426f-95cb-e5b93613efd4.png)
+
+## Deployment
+
+The bloomfilter model is deployed in heroku app using flask which seen the previous breached 1 million passwords and checks the realtime data against the breached passwords. The app.py has all the necessary flask code. You can use the heroku link for realtime experience 
+
+https://breached-password-detection.herokuapp.com/
+
+## Tools and Technologies
+
+- Python
+- Flask
+
+## References
 https://github.com/prriyanayak/Advanced-Algorithm-Project
 
 https://dzone.com/articles/introduction-probabilistic-0#:~:text=Probabilistic%20data%20structures%20have%20many,commonly%20used%20probabilistic%20data%20structures.
@@ -212,8 +225,13 @@ https://github.com/michael-the1/python-cuckoo
 
 https://medium.com/4iqdelvedeep/1-4-billion-clear-text-credentials-discovered-in-a-single-database-3131d0a1ae14
 
-# Heroku 
+## Future Work
 
-https://breached-password-detection.herokuapp.com/
+- Adding better UI
+- Improvising the algorithm
+- Adding further data for better experience.
 
-![image](https://user-images.githubusercontent.com/49152921/134311376-3293c8c9-11c3-426f-95cb-e5b93613efd4.png)
+## Contact
+
+If you found any bug or like to raise a question feel free to contact me through [LinkedIn](https://www.linkedin.com/in/kirushikesh-d-b-10a75a169/). If you feel this project helped you and like to encourage me for more kinds of stuff like this please endorse my skills in my [LinkedIn](https://www.linkedin.com/in/kirushikesh-d-b-10a75a169/) thanks in advance!!!.
+
