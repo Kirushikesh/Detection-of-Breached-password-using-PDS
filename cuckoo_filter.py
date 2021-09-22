@@ -106,6 +106,4 @@ class CuckooFilter():
             return True
         return False
 
-    def required_memory(self):
-        return self.fp*self.p*(self.b**self.m)
     

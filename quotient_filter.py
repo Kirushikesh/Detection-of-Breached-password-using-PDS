@@ -211,7 +211,7 @@ class QuotientFilter:
             return False
 
     def required_memory(self):
-        return (self.q+self.r)*(2**self.q)
+        return (3+self.r)*(2**self.q)
 
     def print_buckets(self):
         for i in range(2**self.q):
