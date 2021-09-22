@@ -5,7 +5,6 @@
 - [Motivation](#motivation)
 - [Different Algorithms](#different-algorithms)
 - [Usage](#usage)
-- [Analysis of various algorithms](#analysis-of-various-algorithms)
 - [Deployment](#deployment)
 - [Tools and Technologies](#tools-and-technologies)
 - [References](#references)
@@ -95,26 +94,102 @@ Counting Bloom filter inherits all the properties and the recomendations of opti
 ![image](https://user-images.githubusercontent.com/49152921/134319728-fbde757d-6e30-4521-8eb8-d58a131cb886.png)
 
 ### Quotient Filter
+
+When the classical Bloom filter and its modifications do not fit into the main memory they are entirely unfriendly to storage due to the requirements of multiple random accesses for any operation. The Quotient filter achieves comparable performance regarding space and time, but additionally supports deletions and can be dynamically resized or merged.
+
+The Quotient filter represents a dataset D = {x1, x2, . . . , xn} by storing a p-bit fingerprint for each of them and requires only one hash function to generate such fingerprints. In order to support enough randomness, the hash function should generate uniformly and independently distributed fingerprints. Each fingerprint f in the algorithm is partitioned into q most significant bits (the quotient) and r least significant bits (the remainder).
+
+where f = f<sub>q</sub>.2<sup>r</sup> + f<sub>r</sub>
+
+Each bucket contains three metadata bits, all unset at the beginning: is_occupied, is_continuation, and is_shifted
+- is_occupied : is set when a slot is the canonical slot for some key stored in the filter(but not necessarily in this slot).
+- is_continuation : is set when a slot is occupied but not by the first remainder in a run.
+- is_shifted : is set when the remainder in a slot is not in its canonical slot.
+
 ![image](https://user-images.githubusercontent.com/49152921/134323079-14ac4695-d1e9-4122-83e0-e3979cd9bd2a.png)
+
+When two finger prints f1 and f2 having same quotient called soft collision when 2 different elements having same fingerprint called as hard collision. In Quotient filter it is
+implemented by storing all the remainders of fingerprints with the same quotient contiguously in a run. The sequence of one or more consecutive runs with no empty buckets
+in between is called a cluster. All clusters are immediately preceded by an empty bucket and the is_shifted bit of its first value is never set. 
+
+When we want to insert a new element into QuotientFilter, we first calculate its quotient and remainder. If the canonical bucket for the element isn’t occupied, it can immediately be inserted using the insertion procedure. Otherwise, before insertion, it is necessary to find an appropriate bucket with the scan function. Once the correct bucket is found, actual insertion still requires the appropriate merging of the f<sub>r</sub> to the sequence of already stored elements, that may need shifting right of subsequent elements and updating the corresponding metadata bits respectively. 
+
+Testing for elements can be completed in the same way as insertion. We check if the canonical bucket for the tested element has at least one associated remainder somewhere in the filter by observing the is_occupied bit. If the bit is not set, we can conclude that element is definitely not in the filter. Otherwise, we scan the filter using
+the scan procedure to find the appropriate run for the bucket. Next, within that run, we compare stored remainders with the remainder of the tested element taking into account that they are all sorted. If such a remainder is found, we can report that the element may exist in the filter.
+
+Deletions in a Quotient filter are handled in a very similar way to the addition of a new element. However, since all remainders of fingerprints with the same quotient are stored contiguously according to their numerical order, removal of a remainder from the cluster must shift all fingerprints to fill the “empty” entry after deletion and modify
+the metadata bits respectively.
+
+Due to hard collisions there is a possibility of false possitives reported out of quotient filter given by
+
 ![image](https://user-images.githubusercontent.com/49152921/134323175-0c1b7366-bc81-453f-ae91-014cced0f0ce.png)
+
+the load factor is very important in the Quotient filter and we want to allocate at least as many buckets as we expect elements, meaning we choose the number of buckets m as
+
 ![image](https://user-images.githubusercontent.com/49152921/134323231-b5c66768-dd9a-4749-a341-022e79482a40.png)
+
+The optimal length of remainder can be found by
+
 ![image](https://user-images.githubusercontent.com/49152921/134323313-07b413c2-da83-4fbb-ac01-5f115ee34e8a.png)
 
-![image](https://user-images.githubusercontent.com/49152921/134310615-00e3682e-c811-4d47-a42a-412cf2f696fe.png)
-![image](https://user-images.githubusercontent.com/49152921/134321963-e0d221e5-288f-4daa-9c11-6aa949fce8ec.png)
+Under constant number of elemets with decrease in the false positive rate the remainder size increases which leads to increase in the filter size
+
 ![image](https://user-images.githubusercontent.com/49152921/134324874-8bdbd237-536e-48fc-b550-147e822a6af2.png)
 
-# CuckooFilter
+### Cuckoo Filter
+
+Most modifications of the classical Bloom filter that support deletions degrade either in space or performance. Cuckoo filters are easier to implement, they support dynamic
+additions and deletions, while using less space and achieving even higher performance. The CuckooFilter data structure is represented as a multi-way associative Cuckoo hash table with m buckets each of which can store up to b values. However, the Cuckoo filter only stores fingerprints and thereis no way to restore the original elements and re-hash them to find their new bucket in the hash table.
+
+According to that schema, for each element x to be inserted,the algorithm computes a p-bit fingerprint f and the indexes of two candidate buckets as follows:
+
 ![image](https://user-images.githubusercontent.com/49152921/134324969-ec01a7b1-b47d-4aba-9dea-07e9c0160f06.png)
+
+The exclusive disjunction (XOR) operation ensures an important property, that by knowing the current element’s buckets k it is possible to compute its alternate bucket k without restoring the original element
+
 ![image](https://user-images.githubusercontent.com/49152921/134325007-4b4fdd67-175a-4089-bda6-fe3a875c3ba1.png)
+
+To add a new element x into the Cuckoo filter, we compute indices for two candidate buckets. If at least one of those buckets is empty, we insert the element into that bucket. Otherwise, we randomly choose one of those buckets and store element x there, while moving the element from that bucket to its alternative candidate bucket.
+
+The testing of element existence in the filter is straightforward. First, for the tested element, we compute the fingerprint and its candidate buckets. If the fingerprint is present in either bucket, we conclude that the element may exist. Otherwise, it is definitely not in the filter.
+
+In order to delete an element, we build the fingerprint, then compute the indices of the candidate buckets and lookup for the fingerprint there. If it matches any existing values in either bucket, one copy of the fingerprint is removed from that bucket.
+
+Since different element can share same fingerprint there is possible of false positives in cuckoo filter,
+
 ![image](https://user-images.githubusercontent.com/49152921/134325083-14977b34-3c12-4d8a-adda-228b523f01fe.png)
+
+The recomended fingerprint length p under the bucket size b and false positive rate given by,
+
 ![image](https://user-images.githubusercontent.com/49152921/134325124-a648d877-8485-4834-9f18-51fbc4a3405c.png)
+
+The number of buckets required under the n and each bucket size b given as,
+
 ![image](https://user-images.githubusercontent.com/49152921/134325149-23177574-4601-40c1-9ce9-c3ca892fb1cb.png)
 
+Under the same bucket size b when the false positive rate decreases leads to the increase in the length of fingerprint
 
 ![image](https://user-images.githubusercontent.com/49152921/134343051-673c7b12-72a4-4d52-a934-7998c1b49490.png)
+
+With constant number of entries if the size of bucket b increases the total number of bucket m decreases gradually,
+
 ![image](https://user-images.githubusercontent.com/49152921/134343803-9daff8c7-d67e-4efc-a583-a7d32588e468.png)
-![image](https://user-images.githubusercontent.com/49152921/134311376-3293c8c9-11c3-426f-95cb-e5b93613efd4.png)
+
+## Usage
+
+bloom_filter.py contains the class BloomFilter which takes the number of entries(n), false positive probability(fp_rate), size of the array(m), number of hash functions(n_hashfn)
+
+![image](https://user-images.githubusercontent.com/49152921/134309723-d44ee54d-f5c7-408a-b203-ee49befbc755.png)
+
+counting_bloom_filter.py contains the class CBloomFilter which takes the number of entries(n), false positive probability(fp_rate), counter size(Counter_size), number of buckets(bucket_size) and, number of hash functions(no_hashfn)
+
+![image](https://user-images.githubusercontent.com/49152921/134310165-cf3667bf-34c3-45eb-b032-0b58a3573f09.png)
+
+quotient_filter.py contains class QuotientFilter which takes the parameter number of entries(n), false positive probability(fp_rate), quotient size(q) and, the remainder size(r)
+
+![image](https://user-images.githubusercontent.com/49152921/134310615-00e3682e-c811-4d47-a42a-412cf2f696fe.png)
+
+cuckoo_filter.py contains class CuckooFilter which takes the parameter number of entries(n), each bucket size(bucket_size), false positive probability(fp_rate), maximum no of iterations(max_kicks), fingerprint size(p) and, the number of buckets(m).
 
 # References
 https://github.com/prriyanayak/Advanced-Algorithm-Project
@@ -141,5 +216,4 @@ https://medium.com/4iqdelvedeep/1-4-billion-clear-text-credentials-discovered-in
 
 https://breached-password-detection.herokuapp.com/
 
-![image](https://user-images.githubusercontent.com/49152921/134309723-d44ee54d-f5c7-408a-b203-ee49befbc755.png)
-![image](https://user-images.githubusercontent.com/49152921/134310165-cf3667bf-34c3-45eb-b032-0b58a3573f09.png)
+![image](https://user-images.githubusercontent.com/49152921/134311376-3293c8c9-11c3-426f-95cb-e5b93613efd4.png)
