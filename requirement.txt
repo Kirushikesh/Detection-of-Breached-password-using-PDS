@@ -1,6 +1,0 @@
-bitarray @ file:///C:/ci/bitarray_1629133068652/work
-certifi==2021.5.30
-fnvhash==0.1.0
-mmh3==3.0.0
-python-math==0.0.1
-wincertstore==0.2
