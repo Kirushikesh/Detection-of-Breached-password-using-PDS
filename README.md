@@ -229,6 +229,8 @@ https://www.amazon.in/Probabilistic-Data-Structures-Algorithms-Applications/dp/3
 
 https://en.wikipedia.org/wiki/Quotient_filter
 
+Please Like my Geeks For Geeks Article on [Counting Bloom Filter](https://www.geeksforgeeks.org/counting-bloom-filters-introduction-and-implementation/)
+
 ## Future Work
 
 - Adding better UI
